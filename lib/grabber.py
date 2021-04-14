@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.by import By
 
 TOWER12_URL = "https://tower12.com/floor-plans/"
-CHROMIUM_DRIVER_PATH = "/usr/lib/chromium-browser/chromedriver"
+CHROMIUM_DRIVER_PATH = "/usr/bin/chromedriver"
 
 
 def grab_floorplans() -> str:
