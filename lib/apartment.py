@@ -33,3 +33,9 @@ class Apartment:
             and self.floorplan == other.floorplan
             and self.price == other.price
         )
+
+    def to_message(self) -> str:
+        msg = "```\n"
+        msg += str(self)
+        msg += "```\n"
+        return msg
