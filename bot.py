@@ -65,6 +65,20 @@ async def check_apts(ctx: Context):
         await ctx.send(msg)
 
 
+@client.command(name="fit")
+async def apartments_fit_criteria(ctx: Context):
+    apartments = parse_apartments(grab_floorplans())
+    apt_fit = list()
+    for apt in apartments:
+        if apt.floor < 20:
+            continue
+        if "F" not in apt.floorplan:
+            continue
+        apt_fit.append(apt)
+    for msg in build_messages(apt_fit):
+        await ctx.send(msg)
+
+
 def main():
     global user_id
     with open("secrets/discord.json") as f:
