@@ -3,6 +3,7 @@ FROM selenium/standalone-chrome
 ADD requirements.txt /
 ADD bot.py /
 ADD lib /lib
+ADD secrets /secrets
 
 USER root
 RUN apt-get update
