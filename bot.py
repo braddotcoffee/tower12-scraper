@@ -11,6 +11,7 @@ client = commands.Bot(description="Tower12 Scraper Bot", command_prefix="!")
 user_id = ""
 SECONDS_IN_DAY = 86400
 existing_apartments = set()
+no_new_apartments_message = "The Tower isn't ready for your Bonanno yet."
 
 
 def chunk(lst, n):
@@ -32,7 +33,7 @@ def build_messages(apartments: List[Apartment], no_fit_msg: str) -> str:
 
 def get_new_apartments() -> List[Apartment]:
     global existing_apartments
-    print("Checking apartments")
+    print("I'll scrape the Tower for you, Code Daddy")
     apartments = parse_apartments(grab_floorplans())
     new_apartments = list(
         filter(lambda apt: apt not in existing_apartments, apartments)
@@ -45,7 +46,7 @@ def get_new_apartments() -> List[Apartment]:
 async def check_loop(user: User):
     global existing_apartments
     new_apartments = get_new_apartments()
-    for msg in build_messages(new_apartments, "No new apartments"):
+    for msg in build_messages(new_apartments, no_new_apartments_message):
         await user.send(msg)
 
 
@@ -60,7 +61,7 @@ async def on_ready():
 async def check_apts(ctx: Context):
     global existing_apartments
     new_apartments = get_new_apartments()
-    for msg in build_messages(new_apartments, "No new apartments"):
+    for msg in build_messages(new_apartments, no_new_apartments_message):
         await ctx.send(msg)
 
 
@@ -74,7 +75,7 @@ async def apartments_fit_criteria(ctx: Context):
         if "F" not in apt.floorplan:
             continue
         apt_fit.append(apt)
-    for msg in build_messages(apt_fit, "No apartments fit criteria"):
+    for msg in build_messages(apt_fit, "These beans don't fit your standards, Mr. Lord Coffee, Sir"):
         await ctx.send(msg)
 
 
