@@ -9,7 +9,7 @@ from lib.apartment import Apartment
 
 client = commands.Bot(description="Tower12 Scraper Bot", command_prefix="!")
 user_id = ""
-SECONDS_IN_DAY = 86400
+HOURS_SINCE_LAST_MESSAGE = 0
 existing_apartments = set()
 
 
@@ -41,10 +41,17 @@ def get_new_apartments() -> List[Apartment]:
     return new_apartments
 
 
-@tasks.loop(hours=24)
-async def check_loop(user: User):
+@tasks.loop(hours=1)
+async def check_loop():
     global existing_apartments
+    global HOURS_SINCE_LAST_MESSAGE
+
+    user = await client.fetch_user(user_id)
     new_apartments = get_new_apartments()
+    if new_apartments == 0 and HOURS_SINCE_LAST_MESSAGE < 24:
+        HOURS_SINCE_LAST_MESSAGE += 1
+        return
+    HOURS_SINCE_LAST_MESSAGE = 0
     for msg in build_messages(new_apartments, "No new apartments"):
         await user.send(msg)
 
@@ -52,8 +59,7 @@ async def check_loop(user: User):
 @client.event
 async def on_ready():
     print(f"{client.user} has connected to Discord!")
-    user = await client.fetch_user(user_id)
-    check_loop.start(user)
+    check_loop.start()
 
 
 @client.command(name="check")
