@@ -48,7 +48,7 @@ async def check_loop():
 
     user = await client.fetch_user(user_id)
     new_apartments = get_new_apartments()
-    if new_apartments == 0 and HOURS_SINCE_LAST_MESSAGE < 24:
+    if len(new_apartments) == 0 and HOURS_SINCE_LAST_MESSAGE < 24:
         HOURS_SINCE_LAST_MESSAGE += 1
         return
     HOURS_SINCE_LAST_MESSAGE = 0
